@@ -61,7 +61,7 @@ router.get('/view',async function(req,res,next){
   console.log('uid='+ uid);
   let id = req.query.id;
   console.log('id='+id);
-  let sql = "select *,datatime(finished,'+9 hours') from todo where user_id =" + uid + "and checked=0 and id="+id;
+  let sql = "select *,datetime(finished,'+9 hours') from todo where user_id =" + uid + " and checked=0 and id="+id;
   console.log(sql);
   let records = await dbget.getRow(sql);
   res.render('view',{
