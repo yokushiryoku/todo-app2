@@ -7,4 +7,7 @@ exports.exec = function(sql){
       resolve(stat);
     });
   });
+  process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+})
 }
