@@ -7,8 +7,8 @@ var dbdo = require('../db/exec.js');
 
 //Login page
 
-router.get('/login',function(req,res,next){
-  res.render('login',{
+router.get('/api/login',function(req,res,next){
+  res.json({
     title: 'Login',
     login: req.session.login,
     // login: {
@@ -17,7 +17,7 @@ router.get('/login',function(req,res,next){
   });
 });
 
-router.post('/login',async function(req,res,next){
+router.post('/api/login',async function(req,res,next){
 
 console.log("--------------------------");
 console.log("--------------------------");
@@ -39,14 +39,14 @@ console.log("--------------------------");
 
 //Logout
 
-router.get('/logout', function(req,res,next){
+router.get('/api/logout', function(req,res,next){
   req.session.login = undefined;
   res.redirect('/users/login');
 });
 
 // Admin (add new User)
 
-router.get('/admin', async function(req,res,next){
+router.get('/api/admin', async function(req,res,next){
   if(req.session.login == undefined){
     console.log("undefinedのほう");
     res.redirect('/users/login');
@@ -55,13 +55,13 @@ router.get('/admin', async function(req,res,next){
     console.log("fuck");
     res.redirect('/users/login');
   }
-  res.render('admin',{
+  res.json({
     title: 'Admin',
     login: req.session.login,
     });
   });
 
-router.post('/admin', async function(req,res,next){
+router.post('/api/admin', async function(req,res,next){
   let account = req.body.account;
   let pass = req.body.password;
   let name = req.body.name;
@@ -78,7 +78,7 @@ router.post('/admin', async function(req,res,next){
 
 //Show User List
 
-router.get('/admin2' , async function(req,res,next){
+router.get('/api/admin2' , async function(req,res,next){
   if(req.session.login == undefined){
     res.redirect('/users/login');
     }
@@ -88,7 +88,7 @@ router.get('/admin2' , async function(req,res,next){
     let sql = 'select * from users';
     let records = await dball.getAllRows(sql);
     console.log('records=' + records);
-    res.render('admin2',{
+    res.json({
       title:'Admin2',
       login: req.session.login,
       data:records,
@@ -97,7 +97,7 @@ router.get('/admin2' , async function(req,res,next){
 
 //Delete User
 
-router.get('/del_usr', async function(req,res,next){
+router.get('/api/del_usr', async function(req,res,next){
   if(req.session.login == undefined){
     res.redirect('/users/login');
   }
