@@ -8,6 +8,8 @@ var session = require('express-session');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var api_indexRouter = require('./routes/api_index');
+var api_usersRouter = require('./routes/api_users');
 
 
 
@@ -22,6 +24,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+//要修正
+
 let ses_opt = {
   secret: 'my secret',
   resave: false,
@@ -34,6 +38,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/', api_indexRouter);
+app.use('/users', api_indexRouter);
 
 
 

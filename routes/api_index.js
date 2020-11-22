@@ -6,14 +6,14 @@ var dball = require('../db/all.js');
 var dbdo = require('../db/exec.js');
 
 // GET http://localhost:3000/api/v1/
-router.get('/api/v1/',function(req,res){
+router.get('/api/v1',function(req,res){
     res.json({
         message:"Hello,world"
     });
 });
 
 /* User Home */
-router.get('/', async function(req, res, next) {
+router.get('/api', async function(req, res, next) {
   //loginが定義されていない場合、ログイン画面に戻す
   if(req.session.login == undefined){
     res.redirect('/users/login');
@@ -27,7 +27,7 @@ console.log('req.session.login.id='+ req.session.login.id);
 
   //console.log(data[i]["datetime(finished,'+9 hours')"] + ' '+data[i].title);
 
-  res.render('index',{
+  res.json({
     title:'ToDo',
     login:req.session.login,
     data: records,
@@ -36,18 +36,18 @@ console.log('req.session.login.id='+ req.session.login.id);
 });
 
 /* Add New ToDo */
-router.get('/add', function(req, res, next) {
+router.get('/api/add', function(req, res, next) {
   //loginが定義されていない場合、ログイン画面に戻す
   if(req.session.login == undefined){
     res.redirect('/users/login');
   }
-  res.render('add',{
+  res.json({
     title: 'Add ToDo',
     login:req.session.login,
   });
 });
 
-router.post('/add',async function(req,res,next){
+router.post('/api/add',async function(req,res,next){
   let uid = req.session.login.id;
   let title = req.body.title;
   let memo = req.body.memo;
@@ -59,7 +59,7 @@ router.post('/add',async function(req,res,next){
 
 /* View ToDo Detail */
 
-router.get('/view',async function(req,res,next){
+router.get('/api/view',async function(req,res,next){
   if(req.session.login == undefined){
     res.redirect('/users/login');
   }
@@ -72,7 +72,7 @@ router.get('/view',async function(req,res,next){
   let records = await dbget.getRow(sql);
 
   console.log(records);
-  res.render('view',{
+  res.json('view',{
     title: 'Show ToDo',
     login: req.session.login,
     data: records,
@@ -80,7 +80,7 @@ router.get('/view',async function(req,res,next){
 });
 
 /* Set checked to TRUE */
-router.get('/complete', async function(req,res,next){
+router.get('/api/complete/', async function(req,res,next){
   if(req.session.login == undefined){
     res.redirect('/users/login');
   }
@@ -93,20 +93,20 @@ router.get('/complete', async function(req,res,next){
 });
 
 /* User home */
-router.get('/user', async function(req,res,next){
+router.get('/api/user', async function(req,res,next){
   if(req.session.login == undefined){
     res.redirect('/users/login');
   }
   let sql =  "select *,datetime(finished,'+9 hours') from todo where user_id="+req.session.login.id+ ' order by finished asc';
   let records = await dball.getAllRows(sql);
-  res.render('user',{
+  res.json({
       title:'User Home',
       login:req.session.login,
       data:records,
     });
   });
 
-  router.get('/del_todo',async function(req,res,next){
+  router.get('/api/del_todo',async function(req,res,next){
     if(req.session.login == undefined){
       res.redirect('/users/login');
     }
