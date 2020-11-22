@@ -13,12 +13,12 @@ router.get('/api/v1',function(req,res){
 });
 
 /* User Home */
-router.get('/api', async function(req, res, next) {
+router.get('/api/index', async function(req, res, next) {
   //loginが定義されていない場合、ログイン画面に戻す
   if(req.session.login == undefined){
     res.redirect('/users/login');
   }
-  //console.log('req.session.login.id:'+req.session.login.id);
+  console.log('req.session.login.id:'+req.session.login.id);
 console.log('req.session.login.id='+ req.session.login.id);
   let sql =  "select *,datetime(finished,'+9 hours') from todo where user_id="+req.session.login.id+ ' and checked = 0 and finished > CURRENT_TIMESTAMP order by finished asc limit 10';
   let records = await dball.getAllRows(sql);
