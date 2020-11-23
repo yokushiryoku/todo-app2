@@ -72,7 +72,7 @@ router.get('/api/view',async function(req,res,next){
   let records = await dbget.getRow(sql);
 
   console.log(records);
-  res.json('view',{
+  res.json({
     title: 'Show ToDo',
     login: req.session.login,
     data: records,
