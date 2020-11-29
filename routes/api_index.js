@@ -14,6 +14,7 @@ router.get('/api/v1',function(req,res){
 
 /* User Home */
 router.get('/api/index', async function(req, res, next) {
+  console.log("リクエスト取得OK");
   //loginが定義されていない場合、ログイン画面に戻す
   if(req.session.login == undefined){
     res.redirect('/users/login');
@@ -22,7 +23,7 @@ router.get('/api/index', async function(req, res, next) {
 console.log('req.session.login.id='+ req.session.login.id);
   let sql =  "select *,datetime(finished,'+9 hours') from todo where user_id="+req.session.login.id+ ' and checked = 0 and finished > CURRENT_TIMESTAMP order by finished asc limit 10';
   let records = await dball.getAllRows(sql);
-  let sql2 =  "select *,datetime(finished,'+9 hours') from todo where user_id="+req.session.login.id+ ' and checked = 0 and finished < CURRENT_TIMESTAMP order by finished asc limit 10';;
+  let sql2 =  "select *,datetime(finished,'+9 hours') from todo where user_id="+req.session.login.id+ ' and checked = 0 and finished < CURRENT_TIMESTAMP order by finished asc limit 10';
   let records2 = await dball.getAllRows(sql2);
 
   //console.log(data[i]["datetime(finished,'+9 hours')"] + ' '+data[i].title);
@@ -36,7 +37,9 @@ console.log('req.session.login.id='+ req.session.login.id);
 });
 
 /* Add New ToDo */
+//URL 直書きで アクセス →GET 基本的に
 router.get('/api/add', function(req, res, next) {
+  console.log("リクエスト取得OK");
   //loginが定義されていない場合、ログイン画面に戻す
   if(req.session.login == undefined){
     res.redirect('/users/login');
@@ -46,8 +49,9 @@ router.get('/api/add', function(req, res, next) {
     login:req.session.login,
   });
 });
-
+//POST ボタンとか押下するとき 基本的に
 router.post('/api/add',async function(req,res,next){
+  console.log("POSTリクエスト取得OK");
   let uid = req.session.login.id;
   let title = req.body.title;
   let memo = req.body.memo;
