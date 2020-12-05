@@ -63,14 +63,59 @@
 		`;
 	}
 
-	renderIndex();
+//ログインしてからは、renderLoginが呼ばれないようにしたい
+
+	renderLogin();
+	function renderLogin(){
+
+		fetch("/users/api/login", {
+			method: "GET",
+		})
+			.then(response => response.json())
+			.then(j => {
+				console.log(j.login);
+				if(j.login !== undefined){
+					console.log("通りました");
+					renderIndex();
+					return;
+				}
+				document.getElementById('root').innerHTML = `
+${renderNav(j)}
+<h1 class = 'mt-3 mb-3'>
+		${j.title}
+</h1>
+
+	<form method='post' action='/users/api/login'>
+
+		<div class='form-group'>
+			<label for ='name'>Account</label>
+			<input type='text' id='account' name='account'
+				class='form-control'>
+		</div>
+
+		<div class='form-group'>
+				<label for='mail'>Password</label>
+				<input type ='password' id='password' name='password'
+					class='form-control'>
+		</div>
+
+		<div class='form-group'>
+			<input type='submit' class='btn btn-primary'>
+		</div>
+
+	</form>
+`
+});
+}
+
+	// renderIndex();
 
 	//----------close----------
 
 	// ----------index(parent)----------
 
 	function renderIndex() {
-		fetch("/api/index", {
+		fetch("/", {
 			method: "GET",
 		})
 			.then(response => response.json())
