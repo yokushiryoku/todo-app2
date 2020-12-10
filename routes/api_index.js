@@ -10,6 +10,7 @@ router.get('/api/v1',function(req,res){
 		res.json({
 				message:"Hello,world"
 		});
+		console.log(message);
 });
 
 /* User Home */
@@ -19,7 +20,6 @@ router.get('/', async function(req, res, next) {
 	if(req.session.login == undefined){
 		res.redirect('/api_index.html');
 	}
-console.log('req.session.login.id:'+req.session.login.id);
 console.log('req.session.login.id='+ req.session.login.id);
 	let sql =  "select *,datetime(finished,'+9 hours') from todo where user_id="+req.session.login.id+ ' and checked = 0 and finished > CURRENT_TIMESTAMP order by finished asc limit 10';
 	let records = await dball.getAllRows(sql);
@@ -28,12 +28,18 @@ console.log('req.session.login.id='+ req.session.login.id);
 
 	//console.log(data[i]["datetime(finished,'+9 hours')"] + ' '+data[i].title);
 
+	console.log("aaaaaaaaaa"+records[0].finished);
+ var yokushi = {stop:"the power"};
 	res.json({
 		title:'ToDo',
 		login:req.session.login,
 		data: records,
 		data2: records2,
 	});
+	console.log(records[1]["datetime(finished,'+9 hours')"] );
+
+	console.log("aaaaaaaaaa"+records[0].finished);
+	console.log("aaaaaaaaaa"+yokushi.stop);
 });
 
 /* Add New ToDo */
@@ -49,6 +55,7 @@ router.get('/api/add', function(req, res, next) {
 		login:req.session.login,
 	});
 });
+
 //POST ボタンとか押下するとき 基本的に
 router.post('/api/add',async function(req,res,next){
 	console.log("POSTリクエスト取得OK");
@@ -58,7 +65,7 @@ router.post('/api/add',async function(req,res,next){
 	let finished = req.body.finished;
 	let sql = "insert into todo (user_id,title,memo,finished) values("+ uid + ",'" + title + "','" + memo+"',datetime('"+finished+"','-9 hours'))";
 	await dbdo.exec(sql);
-	res.redirect('/');
+	res.redirect('/api_index.html');
 });
 
 /* View ToDo Detail */
