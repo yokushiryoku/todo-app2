@@ -5,8 +5,17 @@ var dbget = require('../db/get.js');
 var dball = require('../db/all.js');
 var dbdo = require('../db/exec.js');
 
-// GET http://localhost:3000/api/v1/
-router.get('/api/v1',function(req,res){
+// 環境変数 TEST=true だった場合にはテストとみなし id=1 のユーザーとしてログイン済みとするための処理
+router.use(function (req, res, next) {
+  const isTest = process.env.TEST === "true";
+  if (isTest) {
+    req.session.login = {id: 1}
+  }
+  next();
+});
+
+// GET http://localhost:3000/api/hello/
+router.get('/api/hello',function(req,res){
     res.json({
         message:"Hello,world"
     });
@@ -15,7 +24,7 @@ router.get('/api/v1',function(req,res){
 /* User Home */
 router.get('/api/index', async function(req, res, next) {
   //loginが定義されていない場合、ログイン画面に戻す
-  if(req.session.login == undefined){
+  if(req.session.login == undefined) {
     res.redirect('/users/login');
   }
   console.log('req.session.login.id:'+req.session.login.id);
@@ -54,7 +63,7 @@ router.post('/api/add',async function(req,res,next){
   let finished = req.body.finished;
   let sql = "insert into todo (user_id,title,memo,finished) values("+ uid + ",'" + title + "','" + memo+"',datetime('"+finished+"','-9 hours'))";
   await dbdo.exec(sql);
-  res.redirect('/');
+  res.status(201).json();
 });
 
 /* View ToDo Detail */
