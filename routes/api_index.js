@@ -26,20 +26,21 @@ console.log('req.session.login.id='+ req.session.login.id);
 	let sql2 =  "select *,datetime(finished,'+9 hours') from todo where user_id="+req.session.login.id+ ' and checked = 0 and finished < CURRENT_TIMESTAMP order by finished asc limit 10';
 	let records2 = await dball.getAllRows(sql2);
 
-	//console.log(data[i]["datetime(finished,'+9 hours')"] + ' '+data[i].title);
+for(e in records){
+	records[e].current_T = records[e]["datetime(finished,'+9 hours')"];
+	delete records[e]["datetime(finished,'+9 hours')"];
+}
+for(e in records2){
+	records2[e].current_T = records2[e]["datetime(finished,'+9 hours')"];
+	delete records2[e]["datetime(finished,'+9 hours')"];
+}
 
-	console.log("aaaaaaaaaa"+records[0].finished);
- var yokushi = {stop:"the power"};
 	res.json({
-		title:'ToDo',
+		title:'高度救急救命センター',
 		login:req.session.login,
 		data: records,
 		data2: records2,
 	});
-	console.log(records[1]["datetime(finished,'+9 hours')"] );
-
-	console.log("aaaaaaaaaa"+records[0].finished);
-	console.log("aaaaaaaaaa"+yokushi.stop);
 });
 
 /* Add New ToDo */

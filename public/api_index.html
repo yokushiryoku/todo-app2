@@ -124,7 +124,7 @@ ${renderNav(j)}
 				const nearly = j.data.reduce((acc, cur) => {
 					return acc + `
 <li class='list-group-item list-group-item-action' onClick='renderView(${cur.id})'>
-		<a class='text-dark'>${cur.posted} ${cur.title}</a>
+		<a class='text-dark'>${cur.current_T} ${cur.title}</a>
 </li>`
 				}, "");
 
@@ -133,7 +133,7 @@ ${renderNav(j)}
 				const passed = j.data2.reduce((acc, cur) => {
 					return acc + `
 <li class='list-group-item list-group-item-action' onClick='renderView(${cur.id})'>
-		<a class='text-dark'>${cur.posted} ${cur.title}</a>
+		<a class='text-dark'>${cur.current_T} ${cur.title}</a>
 </li>
 `
 				}, "");
